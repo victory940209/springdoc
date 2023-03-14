@@ -1,0 +1,1 @@
+kill -9 $(cat ./springboot01.pid)

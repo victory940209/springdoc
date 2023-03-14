@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE xml>
+<configuration debug="false" scan="true"
+	scanPeriod="30 seconds">
+
+	<property name="LOGS_PATH" value="/data/logs" />
+	<springProperty scope="context" name="appName" source="spring.application.name"/>
+
+	<appender name="log_file"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${LOGS_PATH}/springdoc.log</file>
+
+		<encoder
+			class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+			<pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %highlight(%-5level) %magenta(%-4relative) --- [${appName}] %cyan(%logger{20}) : %msg%n</pattern>
+		</encoder>
+		<rollingPolicy
+			class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${LOGS_PATH}/springdoc_%d{yyyyMMdd}.log</fileNamePattern>
+			<maxHistory>60</maxHistory>
+		</rollingPolicy>
+	</appender>
+	<logger name="com.victory" level="DEBUG">
+		<appender-ref ref="log_file" />
+	</logger>
+
+	<appender name="console"
+		class="ch.qos.logback.core.ConsoleAppender">
+		<layout class="ch.qos.logback.classic.PatternLayout">
+			<pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %highlight(%-5level) %magenta(%-4relative) --- [${appName}] %cyan(%logger{20}) : %msg%n</pattern>
+		</layout>
+	</appender>
+
+
+	<root level="DEBUG">
+		<appender-ref ref="console" />
+	</root>
+
+	<logger name="com.victory" level="DEBUG" additivity="false">
+		<appender-ref ref="console" />
+		<appender-ref ref="log_file" />
+	</logger>
+</configuration>

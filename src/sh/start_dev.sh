@@ -1,0 +1,1 @@
+/data1/java/jre1.8.0_301/bin/java -jar -Dspring.profiles.active=dev kcbMyCreditScraping.jar &
