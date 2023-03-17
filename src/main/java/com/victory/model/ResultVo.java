@@ -14,12 +14,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ResultVo {
 
-	@Schema(example = "testValue")
-	@JsonProperty("test")
+	@Schema(name = "resultMsg", title = "testTitle", type = "String", example= "example text", nullable= true, defaultValue= "test", allowableValues = {"test","string"}, maxLength= 0, minLength = 10)
+	@JsonProperty("resultMsg")
 	private String resultMsg;
 
-	@Schema(example = "testValue2")
-	@JsonProperty("test2")
+	@Schema(example = "result")
+	@JsonProperty("result")
 	private String result;
 
 }

@@ -3,9 +3,9 @@ package com.victory.biz.controller;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -17,11 +17,16 @@ import com.victory.model.ResultVo;
 import com.victory.model.TestVo;
 import com.victory.system.HttpUrlConnectUtil;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 
-
-@Tag(name = "path1", description = "path1 테스트 컨트롤러 입니다.")
 @Slf4j
 @RestController
 @RequestMapping("/path1")
@@ -30,15 +35,25 @@ public class TestController {
 	@Autowired
 	HttpUrlConnectUtil apiCon;
 
-	@GetMapping(value = "/test")
-	public Map<String, Object> test(@RequestParam Map<String, Object> param) throws Exception {
+	@Tag(name = "tag1", description = "tag1 입니다.")
+	@GetMapping("/test/{name}")
+	@Operation(method = "test method", summary = "test summary ", description = "test description")
+	@ApiResponses(value = {
+	        @ApiResponse(responseCode = "200", description = "조회 성공", content = @Content(schema = @Schema(implementation = ResultVo.class))),
+	        @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content(schema = @Schema(implementation = ResultVo.class)))
+	    })
+	public Map<String, Object> test(
+			@RequestParam @Parameter(name = "parm Map", in = ParameterIn.QUERY, description = "param Map description") Map<String, Object> param,
+			@Parameter(name = "name", in = ParameterIn.PATH, description = "param description") @PathVariable("name") String name)
+			throws Exception {
 
-		log.debug("param : {}", param);
-
+		log.info("param : " + param);
+		log.info("paramNm : " + name);
 		return Map.of("key1", "value1", "key2", "value2");
 
 	}
 
+	@Tag(name = "tag1", description = "tag1 입니다.")
 	@PostMapping(value = "/testResultPost")
 	public Map<String, Object> testResultVoPost(@RequestBody Map<String, Object> param) throws Exception {
 
@@ -50,12 +65,12 @@ public class TestController {
 
 		log.info("result : {}", respEntity.getBody());
 
-
 		return Map.of("key12345", "value12345", "key2", "value2");
 	}
 
+	@Tag(name = "tag2", description = "tag2 입니다.")
 	@PostMapping(value = "/testVo")
-	public TestVo testVo(@RequestBody TestVo param) throws Exception {
+	public TestVo testVo(@RequestBody ResultVo param) throws Exception {
 
 		log.debug("param : {}", param);
 
@@ -67,7 +82,7 @@ public class TestController {
 
 	}
 
-
+	@Tag(name = "tag2", description = "tag2 입니다.")
 	@GetMapping(value = "/testResultVoGet")
 	public ResultVo testResultVoGet(@RequestParam Map<String, Object> param) throws Exception {
 
